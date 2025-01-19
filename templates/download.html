@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download File</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles2.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <style>
+        .loading-circle {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #FF4B2B;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <main>
+            <h1>Almost there!</h1>
+            <p>Your file is ready for download. Press the button below to download it.</p>
+
+            <a class="logout-button" id="download-link" href="{{ url_for('download', filename=file) }}">Download</a>
+            <div class="loading-circle" id="loading-circle"></div>
+
+        </main>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script>
+        document.getElementById('download-link').addEventListener('click', function(event) {
+            event.preventDefault();
+            const link = event.target;
+            const loadingCircle = document.getElementById('loading-circle');
+
+            link.classList.add('hidden');
+            loadingCircle.style.display = 'block';
+
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = link.href;
+            document.body.appendChild(iframe);
+
+            setTimeout(function() {
+                window.location.href = "{{ url_for('home') }}";
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
+

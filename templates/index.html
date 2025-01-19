@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles2.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 400px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .drop-zone {
+            border: 2px dashed #FF4B2B;
+            border-radius: 5px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            background-color: #fff0ee;
+        }
+
+        .drop-zone-text {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            min-height: 1.2em;
+        }
+
+        .upload-btn {
+            margin-top: 1rem;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .upload-btn:hover {
+            background-color: #45a049;
+        }
+
+        .upload-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .loading-circle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #FF4B2B;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logout-btn {
+            margin-top: 1rem;
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .logout-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h1>PDF Upload</h1>
+            <p>Drag and drop your PDF file or click to select</p>
+        </div>
+
+        <form id="upload-form" action="{{ url_for('user') }}" method="POST" enctype="multipart/form-data">
+            <div class="file-upload">
+                <div id="drop-zone" class="drop-zone">
+                    <span class="drop-zone-text">Drag & Drop PDF here or Click to select</span>
+                    <input type="file" name="pdf_file" id="file-input" class="file-input" accept=".pdf">
+                </div>
+                <div id="file-name" class="file-name"></div>
+                <button type="submit" id="upload-btn" class="upload-btn" disabled>Upload PDF</button>
+                <div id="loading-circle" class="loading-circle"></div>
+            </div>
+        </form>
+
+        <form action="{{ url_for('logout') }}" method="POST">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileName = document.getElementById('file-name');
+        const uploadBtn = document.getElementById('upload-btn');
+        const uploadForm = document.getElementById('upload-form');
+        const loadingCircle = document.getElementById('loading-circle');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            fileInput.files = e.dataTransfer.files;
+            updateFileName();
+        });
+
+        fileInput.addEventListener('change', updateFileName);
+
+        function updateFileName() {
+            if (fileInput.files && fileInput.files.length > 0) {
+                fileName.textContent = fileInput.files[0].name;
+                uploadBtn.disabled = false;
+            } else {
+                fileName.textContent = '';
+                uploadBtn.disabled = true;
+            }
+        }
+
+        uploadForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (fileInput.files.length > 0) {
+                uploadBtn.style.display = 'none';
+                loadingCircle.style.display = 'block';
+                this.submit();
+            } else {
+                alert('Please select a file to upload.');
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,11 @@
+.vercel
+
+# Logs
+logs
+
+# Enviornment
+venv
+env
+
+# Environment variables
+.env

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,800">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <style>
+        body {
+            background: #f6f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 
+                        0 10px 10px rgba(0, 0, 0, 0.22);
+            width: 90%;
+            max-width: 1200px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #FF4B2B;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        table th {
+            background-color: #FF4B2B;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+
+        table tr:hover {
+            background-color: #ffeded;
+        }
+
+        .logout-button {
+            border-radius: 20px;
+            border: 1px solid #FF4B2B;
+            background-color: #FF4B2B;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 12px 24px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .logout-button:hover {
+            background-color: #FF6B5B;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Details</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>API Calls</th>
+                    <th>Total Tokens Used</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.api_calls }}</td>
+                    <td>{{ user.total_token_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form action="{{ url_for('logout') }}" method="POST">
+            <button class="logout-button" type='submit'>Logout</button>
+        </form>
+    </div>
+</body>
+<script>
+    document.querySelectorAll('table tbody tr').forEach(row => {
+        row.addEventListener('click', () => {
+            row.classList.toggle('selected');
+        });
+    });
+</script>
+</html>
+
