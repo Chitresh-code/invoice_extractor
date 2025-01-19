@@ -24,7 +24,8 @@ Invoice Extractor is a web application that allows users to upload PDF files of 
 
 ### Prerequisites
 - Docker
-- Docker Compose
+- Gemini API Key
+- PostgreSQL Database URL
 
 ### Steps
 1. Clone the repository:
