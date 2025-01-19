@@ -184,10 +184,157 @@
                 z-index: 5;
             }
         }
+
+        .sign-up-prompt {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                margin: 0;
+                padding: 20px;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 400px;
+                min-height: auto;
+                margin: 0 auto;
+                padding: 30px 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .form-container {
+                width: 100%;
+                position: relative;
+                left: 0;
+                height: auto;
+                padding: 0;
+            }
+
+            form {
+                padding: 0;
+            }
+
+            .sign-up-container {
+                display: none;
+            }
+
+            .overlay-container {
+                display: none;
+            }
+
+            .mobile-toggle {
+                display: block;
+                margin-top: 20px;
+                background-color: transparent;
+                border: 2px solid var(--primary-color);
+                color: var(--primary-color);
+            }
+
+            .mobile-toggle:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+            .desktop-only {
+                display: none;
+            }
+
+            input {
+                margin: 12px 0;
+            }
+
+            button[type="submit"] {
+                margin-top: 20px;
+                width: 100%;
+            }
+
+            h1 {
+                margin-bottom: 20px;
+            }
+
+            .password-container {
+                margin: 12px 0;
+                width: 100%;
+            }
+
+            a {
+                margin: 15px 0;
+            }
+
+            .sign-up-prompt {
+                margin-top: 20px;
+                text-align: center;
+            }
+    
+            .sign-up-prompt p {
+                color: #666;
+                margin: 0;
+                font-size: 14px;
+            }
+        }
+
+        .mobile-toggle {
+            display: none;
+        }
+
+        .link-button {
+            background: none;
+            border: none;
+            color: #FF4B2B;
+            padding: 0;
+            font: inherit;
+            cursor: pointer;
+            text-decoration: underline;
+            display: inline;
+            margin: 0;
+            width: auto;
+        }
+
+        .sign-in-button {
+            background-color: #FF4B2B;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            padding: 12px 45px;
+            width: 100%;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle.link-button {
+                display: inline;
+                margin: 0;
+                padding: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container" id="container">
+        <div class="form-container sign-in-container">
+            <form action="{{ url_for('login') }}" method="POST">
+                <h1>Sign in</h1>
+                <input type="text" name="username" placeholder="Username" required />
+                <div class="password-container">
+                    <input type="password" name="password" id="signin-password" placeholder="Password" required />
+                    <i class="fas fa-eye password-toggle" id="signin-password-toggle"></i>
+                </div>
+                <a href="#">Forgot your password?</a>
+                <button type="submit" class="sign-in-button">SIGN IN</button>
+                <div class="sign-up-prompt">
+                    <p>Don't have an account? <button type="button" class="mobile-toggle link-button" id="mobileToggleSignUp">Sign up</button></p>
+                </div>
+            </form>
+        </div>
         <div class="form-container sign-up-container">
             <form action="{{ url_for('register') }}" method="POST" id="signup-form">
                 <h1>Create Account</h1>
@@ -203,21 +350,10 @@
                     <i class="fas fa-eye password-toggle" id="signup-confirm-password-toggle"></i>
                 </div>
                 <button type="submit">Sign Up</button>
+                <button type="button" class="mobile-toggle" id="mobileToggleSignIn">Back to Sign In</button>
             </form>
         </div>
-        <div class="form-container sign-in-container">
-            <form action="{{ url_for('login') }}" method="POST">
-                <h1>Sign in</h1>
-                <input type="text" name="username" placeholder="Username" required />
-                <div class="password-container">
-                    <input type="password" name="password" id="signin-password" placeholder="Password" required />
-                    <i class="fas fa-eye password-toggle" id="signin-password-toggle"></i>
-                </div>
-                <a href="#">Forgot your password?</a>
-                <button type="submit">Sign In</button>
-            </form>
-        </div>
-        <div class="overlay-container">
+        <div class="overlay-container desktop-only">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
                     <h1>Welcome Back!</h1>
@@ -237,6 +373,8 @@
         const signUpButton = document.getElementById('signUp');
         const signInButton = document.getElementById('signIn');
         const container = document.getElementById('container');
+        const mobileToggleSignUp = document.getElementById('mobileToggleSignUp');
+        const mobileToggleSignIn = document.getElementById('mobileToggleSignIn');
 
         signUpButton.addEventListener('click', () => {
             container.classList.add("right-panel-active");
@@ -244,6 +382,16 @@
 
         signInButton.addEventListener('click', () => {
             container.classList.remove("right-panel-active");
+        });
+
+        mobileToggleSignUp.addEventListener('click', () => {
+            document.querySelector('.sign-in-container').style.display = 'none';
+            document.querySelector('.sign-up-container').style.display = 'block';
+        });
+
+        mobileToggleSignIn.addEventListener('click', () => {
+            document.querySelector('.sign-up-container').style.display = 'none';
+            document.querySelector('.sign-in-container').style.display = 'block';
         });
 
         // Password visibility toggle
@@ -277,4 +425,3 @@
     </script>
 </body>
 </html>
-
