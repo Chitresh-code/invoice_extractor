@@ -5,10 +5,6 @@ services:
     build: .
     ports:
       - "5000:5000"
-    environment:
-      - DATABASE_URL=postgresql://users_owner:oIUjKy23DAcq@ep-holy-mouse-a12tmgtt.ap-southeast-1.aws.neon.tech/users?sslmode=require
-      - GEMINI_API_KEY=AIzaSyCQTi02_eguYtdpMwTU7qyU3Ix9UFWFtXQ
-      - APP_SECRET_KEY=random_secret_key
     volumes:
       - .:/app
     deploy:
