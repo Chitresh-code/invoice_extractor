@@ -14,7 +14,7 @@ def setup_logger(name: str) -> logging.Logger:
     # Create a directory for logs if it doesn't exist
     log_dir = "logs"  # You can change this to any directory you prefer
     if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
+        os.makedirs(log_dir, exist_ok=True)
 
     log_file = os.path.join(log_dir, f"{name}.log")
     

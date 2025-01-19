@@ -7,11 +7,17 @@ from src.preprocess import pdf_to_image_dict
 from src.ai import process_image_data
 from src.postprocess import create_dataframe, save_dataframe_to_excel
 from werkzeug.utils import secure_filename
+from werkzeug.middleware.proxy_fix import ProxyFix
+import os
 
 # Initialize Flask app
 app = Flask(__name__)
+
+# Apply ProxyFix to handle reverse proxy setups
+app.wsgi_app = ProxyFix(app.wsgi_app)
+
 logger = setup_logger(__name__)
-app.secret_key = 'app_secret_key'  # Needed for session management
+app.secret_key = os.environ.get('APP_SECRET_KEY', 'default_secret_key')  # Use environment variable for secret key
 
 @app.before_request
 def make_session_permanent():
@@ -262,4 +268,6 @@ def download_file(filename):
 if __name__ == '__main__':
     logger.info('Starting Flask app')
     delete_log_dir() # Delete the logs directory
-    app.run()
+    
+    # For local development
+    # app.run(host='0.0.0.0', port=5000)
